@@ -1,6 +1,8 @@
 import uuid
 
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 app = FastAPI(title="Doc QA Service")
@@ -37,3 +39,10 @@ def get_document(doc_id: str):
     if text is None:
         raise HTTPException(status_code=404, detail="document not found")
     return DocumentOut(id=doc_id, length=len(text))
+
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
+
+
+@app.get("/")
+def index():
+    return FileResponse("app/static/index.html")

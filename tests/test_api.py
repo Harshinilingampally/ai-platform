@@ -34,3 +34,8 @@ def test_roundtrip_create_then_fetch():
     fetched = client.get(f"/documents/{created['id']}").json()
     assert fetched["id"] == created["id"]
     assert fetched["length"] == 9
+
+def test_index_page_is_served():
+    response = client.get("/")
+    assert response.status_code == 200
+    assert "Document service" in response.text
